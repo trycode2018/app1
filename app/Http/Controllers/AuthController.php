@@ -8,10 +8,10 @@ use Tymon\JWTAuth\Facades\JWTAuth;
 
 class AuthController extends Controller
 {
-    public function __construct()
+    /*public function __construct()
     {
         $this->middleware('apiJwt',['except'=>['login','register']]);
-    }
+    }*/
 
     public function register(){
 

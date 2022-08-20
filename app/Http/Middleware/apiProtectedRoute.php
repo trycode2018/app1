@@ -5,8 +5,9 @@ namespace App\Http\Middleware;
 use Closure;
 use Illuminate\Http\Request;
 use Tymon\JWTAuth\Facades\JWTAuth;
+use Tymon\JWTAuth\Http\Middleware\BaseMiddleware;
 
-class apiProtectedRoute
+class apiProtectedRoute extends BaseMiddleware
 {
     /**
      * Handle an incoming request.
@@ -18,7 +19,7 @@ class apiProtectedRoute
     public function handle(Request $request, Closure $next)
     {
         try{
-            $user = JWTAuth::parseToke()->authenticate();
+            $user = JWTAuth::parseToken()->authenticate();
         }catch(\Exception $e)
         {
             if($e instanceof \Tymon\JWTAuth\Exceptions\TokenInvalidException)
