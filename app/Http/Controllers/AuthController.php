@@ -10,7 +10,7 @@ class AuthController extends Controller
 {
     public function __construct()
     {
-        $this->middleware('auth:api',['except'=>['login','register']]);
+        $this->middleware('apiJwt',['except'=>['login','register']]);
     }
 
     public function register(){
@@ -39,8 +39,8 @@ class AuthController extends Controller
         );
     }
 
-    public function login(){
-        $credentials = request(['email','password']);
+    public function login(Request $request){
+        $credentials = $request->only(['email','password']);
 
         if(! $token = JWTAuth::attempt($credentials)){
             return response()->json(['error'=>'Unauthorized'],401);
@@ -50,24 +50,24 @@ class AuthController extends Controller
     }
 
     public function me(){
-        return response()->json(auth()->user());
+        return response()->json(auth('api')->user());
     }
 
     public function logout(){
-        auth()->logout();
+        auth('api')->logout();
 
         return response()->json(['message'=>'Successfuly logged out']);
     }
 
     public function refresh(){
-        return $this->respondWithToken(auth()->refresh());
+        return $this->respondWithToken(JWTAuth::refresh());
     }
 
     protected function respondWithToken($token){
         return response()->json([
             'access_token'=>$token,
             'token_type'=> 'bearer',
-            'expires_in'=> config('jwt.ttl')
+            'expires_in'=> JWTAuth::factory()->getTTL()*60
         ]);
     }
 
