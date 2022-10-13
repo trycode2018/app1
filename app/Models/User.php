@@ -22,8 +22,10 @@ class User extends Authenticatable implements JWTSubject
      * @var array<int, string>
      */
     protected $fillable = [
+        'number_bi',
         'name',
-        'email',
+        'phone_number',
+        'level',
         'password',
     ];
 
@@ -55,4 +57,21 @@ class User extends Authenticatable implements JWTSubject
     {
         return [];
     }
+    public function clients(){
+        return $this->belongsTo(Client::class);
+    }
+
+    public function categories()
+    {
+        return $this->belongsTo(Category::class);
+    }
+    public function providers()
+    {
+        return $this->belongsTo(Provider::class);
+    }
+    public function invoice()
+    {
+        return $this->belongsTo(Invoice::class);
+    }
+
 }

@@ -13,23 +13,35 @@ class AuthController extends Controller
         $this->middleware('apiJwt',['except'=>['login','register']]);
     }*/
 
-    public function register(){
+    public function register(Request $request){
 
-        $validator = validator()->make(request()->all(),[
+        $validator = validator()->make(
+            request()->all()
+            //$request->only(['name','email','password'])
+            /*
+                - Utilizar tamplate engine Request para
+                ver se vai modificar alguma coisa.
+            */
+            ,[
             'name'=>'string|required',
-            'email'=>'string|required',
-            'password'=>'string|min:6'
+            'email'=>'email|required',
+            'number_bi'=>'required',
+            'phone_number'=>'required',
+            'password'=>'string|min:8'
         ]);
 
-        if($validator->fails()){
+        /*if($validator->fails()){
             return response()->json([
                 'message'=>'Registration fail'
             ]);
-        }
+        }*/
+
         $user = User::create([
             'name'=> request()->get('name'),
             'email'=>request()->get('email'),
-            'password'=> bcrypt(request()->get('password'))
+            'password'=> bcrypt(request()->get('password')),
+            'number_bi'=>request()->get('number_bi'),
+            'phone_number'=>request()->get('phone_number')
         ]);
         return response()->json(
             [
@@ -40,7 +52,7 @@ class AuthController extends Controller
     }
 
     public function login(Request $request){
-        $credentials = $request->only(['email','password']);
+        $credentials = $request->only(['number_bi','password']);
 
         if(! $token = JWTAuth::attempt($credentials)){
             return response()->json(['error'=>'Unauthorized'],401);
@@ -67,10 +79,9 @@ class AuthController extends Controller
         return response()->json([
             'access_token'=>$token,
             'token_type'=> 'bearer',
-            'expires_in'=> JWTAuth::factory()->getTTL()*60
-        ]);
+            'expires_in'=> JWTAuth::factory()->getTTL()*86400,
+            'message'=>'Login successfuly'
+        ],200);
     }
 
 }
-
-
