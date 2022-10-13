@@ -4,6 +4,7 @@ use App\Http\Controllers\AuthController;
 use App\Http\Controllers\CategoryController;
 use App\Http\Controllers\ClientController;
 use App\Http\Controllers\InvoiceController;
+use App\Http\Controllers\ProductController;
 use App\Http\Controllers\ProviderController;
 use App\Http\Controllers\UserController;
 use App\Models\Category;
@@ -34,6 +35,7 @@ Route::group([
        Route::apiResource('categories',CategoryController::class);
        Route::apiResource('providers',ProviderController::class);
        Route::apiResource('invoices',InvoiceController::class);
+       Route::apiResource('products',ProductController::class);
 
 
        Route::post('logout',[AuthController::class,'logout']);

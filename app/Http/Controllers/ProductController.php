@@ -5,6 +5,7 @@ namespace App\Http\Controllers;
 use App\Models\Product;
 use App\Http\Requests\StoreProductRequest;
 use App\Http\Requests\UpdateProductRequest;
+use Illuminate\Http\Request;
 
 class ProductController extends Controller
 {
@@ -34,9 +35,14 @@ class ProductController extends Controller
      * @param  \App\Http\Requests\StoreProductRequest  $request
      * @return \Illuminate\Http\Response
      */
-    public function store(StoreProductRequest $request)
+    public function store(Request $request,Product $product)
     {
-        //
+        $product->create($request->all());
+        return response()->json([
+           'data'=>[
+               'message'=>'Producto cadastrad'
+           ]
+        ],200);
     }
 
     /**
@@ -47,7 +53,11 @@ class ProductController extends Controller
      */
     public function show(Product $product)
     {
-        //
+        return response()->json([
+            'data'=>[
+                'message'=>$product
+            ]
+            ]);
     }
 
     /**
@@ -68,9 +78,14 @@ class ProductController extends Controller
      * @param  \App\Models\Product  $product
      * @return \Illuminate\Http\Response
      */
-    public function update(UpdateProductRequest $request, Product $product)
+    public function update(Request $request, Product $product)
     {
-        //
+        $product->update($request->all());
+        return response()->json([
+           'data'=>[
+               'message'=>'Producto actualizado'
+           ]
+        ],200);
     }
 
     /**
